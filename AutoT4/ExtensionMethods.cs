@@ -42,16 +42,19 @@ namespace BennorMcCarthy.AutoT4
 
         public static void RunTemplate(this ProjectItem template)
         {
-            var templateVsProjectItem = template.Object as VSProjectItem;
-            if (templateVsProjectItem != null)
+            lock(template.Object) 
             {
-                templateVsProjectItem.RunCustomTool();
-            }
-            else
-            {
-                if (!template.IsOpen)
-                    template.Open();
-                template.Save();
+                var templateVsProjectItem = template.Object as VSProjectItem;
+                if (templateVsProjectItem != null)
+                {
+                    templateVsProjectItem.RunCustomTool();
+                }
+                else
+                {
+                    if (!template.IsOpen)
+                        template.Open();
+                    template.Save();
+                }
             }
         }
     }
